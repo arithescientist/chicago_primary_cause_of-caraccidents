@@ -101,20 +101,20 @@ Random Forest, X Boosting & LinearSVC classifiers where implimented after re-sam
    * Age
    * Physical Condition
 
-<img src='images/cm.png' width='1000%'/>
+  <img src='images/cm.PNG' width='1000%'/>
 
 
 
 ## Interpretion
 The model gave a log loss of 12.9 which and accuracy of 62%. This means the amount the model penelizes for incorrect predictions 12.6 but it only predicted 62% of the primary causes of accidents accurately.
 
-<img src='images/recall.PNG' width='75%'/>
+  <img src='images/recall.PNG' width='75%'/>
 
 Its total recall is 62% which is the total amount of times the model classified the cause of an accident was a category correctly out of the total amount of times that category was indeed the cause.
 
 Its total precision is 62% and this is the total amount of times the model classified the cause of an accident was a category correctly out of the total amount of the predictions made for that category.
 
-<img src='images/roc.PNG' width='1000%'/>
+  <img src='images/roc.PNG' width='1000%'/>
 
 The AUC score is 0.8 and this is the average probability that the model can classifiy each class correctly. 
 
