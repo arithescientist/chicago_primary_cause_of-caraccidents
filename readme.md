@@ -24,7 +24,7 @@
 --->
 
 # Purpose
-The goal of this research is to analyze past housing data in order to predict sell prices of homes and answer the following questions: 
+The goal of this research is to analyze chicago car accident reports data in order to classify the primary cause of an accident and answer the following questions: 
    * Q1 - What is the distribution of car accident causes?
    
    * Q2 - What regions do the most car accidents occur?
