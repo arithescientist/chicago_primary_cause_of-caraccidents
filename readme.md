@@ -1,8 +1,9 @@
 # Investigating the Car Accidents In Chicago
 
-<a href="https://github.com/ariavathlete/chicago_primary_cause_of-caraccidents/blob/master/Tesla_Full_Autonomy.pdf"> BLOG</a>
 <a href="https://github.com/ariavathlete/chicago_primary_cause_of-caraccidents/blob/master/Analysis%20of%20Car%20Accidents%20In%20Chicago.pdf
-">| PRESENTATION</a>
+">PRESENTATION</a>
+<a href="https://github.com/ariavathlete/chicago_primary_cause_of-caraccidents/blob/master/Tesla_Full_Autonomy.pdf">| BLOG</a>
+
 
   <img src='images/prim.PNG' width='50%'/>
 
