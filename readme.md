@@ -6,7 +6,7 @@
 <a href="https://drive.google.com/file/d/132X3UY9H_6BgXfvcBY1MgIdgHzgqQWP-/view?usp=sharing"> Video Recording </a>
 
 <img src='images/prim.png' width='80%'/>
-###### Heavily Imbalanced Classes
+##### Heavily Imbalanced Classes
 
 # Table Of Contents
 * [Purpose](#purpose)
