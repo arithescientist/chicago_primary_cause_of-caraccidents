@@ -5,7 +5,7 @@
 ">| PRESENTATION</a>
 
   <img src='images/prim.PNG' width='50%'/>
-#### Heavily Imbalanced Classes
+### Heavily Imbalanced Classes
 
 # Table Of Contents
 * [Purpose](#purpose)
