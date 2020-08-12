@@ -1,7 +1,7 @@
 # Investigating the Car Accidents In Chicago
 
 <a href="https://github.com/ariavathlete/dsc-mod-2-project-v2-1-onl01-dtsc-ft-041320/blob/master/Document14.pdf"> BLOG</a>
-<a href="https://github.com/ariavathlete/dsc-mod-1-project-v2-1-onl01-dtsc-ft-041320/blob/master/Success%20in%20the%20Movie%20Industry.pdf
+<a href="https://github.com/ariavathlete/chicago_primary_cause_of-caraccidents/blob/master/Analysis%20of%20Car%20Accidents%20In%20Chicago.pdf
 ">| PRESENTATION</a>
 
   <img src='images/prim.PNG' width='50%'/>
