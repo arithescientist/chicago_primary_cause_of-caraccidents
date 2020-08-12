@@ -5,7 +5,6 @@
 ">| PRESENTATION</a>
 
   <img src='images/prim.PNG' width='50%'/>
-# Heavily Imbalanced Classes
 
 # Table Of Contents
 * [Purpose](#purpose)
@@ -47,7 +46,7 @@ Data files used:
 
 ### EDA
 #### [Distribution of car accidents's primary causes](./visualizationsv.ipynb)
-   <img src='images/crashtype.PNG' width='1000%'/> 
+   <img src='images/crashtype.PNG' width='50%'/> 
 
 The most deadly types of crashes leading in proportions are Turning at 19% and Angle at 13%. I’ll recommend focusing on these as they account for the most fatalities.
 
