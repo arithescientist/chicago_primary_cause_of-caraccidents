@@ -64,7 +64,7 @@ The most deadly types of crashes leading in proportions are: Turning at 19% and 
 
 ### EDA
 #### [Distribution of car accidents with injuries by street](./visualizationsv.ipynb)
-   <img src='images/crashwinjuries.PNG' width='1000%'/>
+   <img src='images/crashwinjuries.PNG' width='70%'/>
 
 
 ### Conclusion
@@ -108,7 +108,7 @@ Random Forest, X Boosting & LinearSVC classifiers where implimented after re-sam
 ## Interpretion
 The model gave a log loss of 12.9 which and accuracy of 62%. This means the amount the model penelizes for incorrect predictions 12.6 but it only predicted 62% of the primary causes of accidents accurately.
 
-<img src='images/recall.PNG' width='1000%'/>
+<img src='images/recall.PNG' width='75%'/>
 
 Its total recall is 62% which is the total amount of times the model classified the cause of an accident was a category correctly out of the total amount of times that category was indeed the cause.
 
