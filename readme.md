@@ -3,9 +3,8 @@
 <a href="https://github.com/ariavathlete/dsc-mod-2-project-v2-1-onl01-dtsc-ft-041320/blob/master/Document14.pdf"> Blog </a>
 <a href="https://github.com/ariavathlete/dsc-mod-1-project-v2-1-onl01-dtsc-ft-041320/blob/master/Success%20in%20the%20Movie%20Industry.pdf
 "> Presentation </a>
-<a href="https://drive.google.com/file/d/132X3UY9H_6BgXfvcBY1MgIdgHzgqQWP-/view?usp=sharing"> Video Recording </a>
 
-<img src='images/prim.png' width='80%'/>
+  <img src='images/prim.PNG' width='80%'/>
 ##### Heavily Imbalanced Classes
 
 # Table Of Contents
@@ -48,7 +47,7 @@ Data files used:
 
 ### EDA
 #### [Distribution of car accidents's primary causes](./visualizationsv.ipynb)
-   <img src='images/crashtype.png' width='1000%'/> 
+   <img src='images/crashtype.PNG' width='1000%'/> 
 
 The most deadly types of crashes leading in proportions are Turning at 19% and Angle at 13%. I’ll recommend focusing on these as they account for the most fatalities.
 
@@ -66,7 +65,7 @@ The most deadly types of crashes leading in proportions are: Turning at 19% and 
 
 ### EDA
 #### [Distribution of car accidents with injuries by street](./visualizationsv.ipynb)
-   <img src='images/crashwinjuries.png' width='1000%'/>
+   <img src='images/crashwinjuries.PNG' width='1000%'/>
 
 
 ### Conclusion
@@ -81,7 +80,7 @@ I'll definitely recommend channeling more law enforcers and first aid responders
 
 ### EDA
 #### [Time & Weather's effect on amount of accidents that occur](./visualizationsv.ipynb)
-   <img src='images/timenwea.png' width='1000%'/>
+   <img src='images/timenwea.PNG' width='1000%'/>
 
 ### Conclusion
 From the histogram we can see most accidents occur in clear weather but more accidents with injuries occurs when there’s hail or when it snows. We can also see more accidents occur from 4pm to 8pm.
@@ -110,13 +109,13 @@ Random Forest, X Boosting & LinearSVC classifiers where implimented after re-sam
 ## Interpretion
 The model gave a log loss of 12.9 which and accuracy of 62%. This means the amount the model penelizes for incorrect predictions 12.6 but it only predicted 62% of the primary causes of accidents accurately.
 
-<img src='images/recall.png' width='1000%'/>
+<img src='images/recall.PNG' width='1000%'/>
 
 Its total recall is 62% which is the total amount of times the model classified the cause of an accident was a category correctly out of the total amount of times that category was indeed the cause.
 
 Its total precision is 62% and this is the total amount of times the model classified the cause of an accident was a category correctly out of the total amount of the predictions made for that category.
 
-<img src='images/roc.png' width='1000%'/>
+<img src='images/roc.PNG' width='1000%'/>
 
 The AUC score is 0.8 and this is the average probability that the model can classifiy each class correctly. 
 
