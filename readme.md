@@ -120,8 +120,6 @@ The AUC score is 0.8 and this is the average probability that the model can clas
 
 The main metrics we'll focus on for this would be recall and the AUC score as we won't want to incorrectly classify the cause of an accident and risk wrongfully blaming a driver for an accident when it might have been something else.
 
-
-
 # Future Work
    * Road Type Division: Segregate the different types of streets/roads to understand the unique properties of accidents that occurs in each 
 
