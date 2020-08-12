@@ -1,6 +1,6 @@
 # Investigating the Car Accidents In Chicago
 
-<a href="https://github.com/ariavathlete/dsc-mod-2-project-v2-1-onl01-dtsc-ft-041320/blob/master/Document14.pdf"> BLOG</a>
+<a href="https://github.com/ariavathlete/chicago_primary_cause_of-caraccidents/blob/master/Tesla_Full_Autonomy.pdf"> BLOG</a>
 <a href="https://github.com/ariavathlete/chicago_primary_cause_of-caraccidents/blob/master/Analysis%20of%20Car%20Accidents%20In%20Chicago.pdf
 ">| PRESENTATION</a>
 
