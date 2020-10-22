@@ -5,7 +5,7 @@
 <a href="https://github.com/ariavathlete/chicago_primary_cause_of-caraccidents/blob/master/Tesla_Full_Autonomy.pdf">| BLOG</a>
 
 
-  <img src='images/prim.PNG' width='50%'/>
+   <img src='images/input.PNG' width='75%'/>
 
 # Table Of Contents
 * [Purpose](#purpose)
@@ -107,11 +107,9 @@ Random Forest, X Boosting & LinearSVC classifiers where implimented after re-sam
 
 
 ## Interpretion
-The model gave a log loss of 12.9 which and accuracy of 62%. This means the amount the model penelizes for incorrect predictions 12.6 but it only predicted 62% of the primary causes of accidents accurately.
+The model gave a log loss of 13.4 which and accuracy of 61.2%. This means the amount the model penelizes for incorrect predictions 13.4 but it only predicted 61% of the primary causes of accidents accurately.
 
-  <img src='images/recall.PNG' width='75%'/>
-
-Its total recall is 62% which is the total amount of times the model classified the cause of an accident was a category correctly out of the total amount of times that category was indeed the cause.
+Its total recall is 61.2% which is the total amount of times the model classified the cause of an accident was a category correctly out of the total amount of times that category was indeed the cause.
 
 Its total precision is 62% and this is the total amount of times the model classified the cause of an accident was a category correctly out of the total amount of the predictions made for that category.
 
