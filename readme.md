@@ -6,8 +6,11 @@
 
 
    <img src='images/Input.png' width='75%'/>
+   
+   Amazon EC2 Link - http://ec2-18-221-241-166.us-east-2.compute.amazonaws.com:5000/
 
 # Table Of Contents
+* [Setup](#setup)
 * [Purpose](#purpose)
 * [Data Files](#data-description)
 * [Question 1](#question-1)
@@ -22,6 +25,18 @@
 #### = h4
 ##### = h5
 --->
+
+# Setup
+
+- Install the requirements and setup the development environment.
+
+	`pip3 install -r requirements.txt`
+
+- Run the application.
+
+	`python3 app.py`
+
+- Navigate to `localhost:5000`.
 
 # Purpose
 The goal of this research is to analyze chicago car accident reports data in order to classify the primary cause of an accident and answer the following questions: 
