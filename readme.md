@@ -5,7 +5,7 @@
 <a href="https://github.com/ariavathlete/chicago_primary_cause_of-caraccidents/blob/master/Tesla_Full_Autonomy.pdf">| BLOG</a>
 
 
-   <img src='images/input.PNG' width='75%'/>
+   <img src='images/Input.png' width='75%'/>
 
 # Table Of Contents
 * [Purpose](#purpose)
