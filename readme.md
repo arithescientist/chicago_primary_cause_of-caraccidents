@@ -105,7 +105,7 @@ From the histogram we can see most accidents occur in clear weather but more acc
 My recommendation based on this would be to employ more government trucks to salt the street when it snows to minimize the chances of having a fatal accident.
 
 
-# [Modelling](./models/model1.ipynb)
+# [Model](./student.ipynb)
 Random Forest, X Boosting & LinearSVC classifiers where implimented after re-sampling with SMOTE since the dataset was heavily imbalanced and they all gave roughly the same results give or take 5%. So I opted to go with X Boosting classifier using PCA as its feature selection parameter. The features included where: 
 
    * Driver’s Action
@@ -119,14 +119,19 @@ Random Forest, X Boosting & LinearSVC classifiers where implimented after re-sam
 
   <img src='images/cm.PNG' width='1000%'/>
 
-
-
 ## Interpretion
-The model gave a log loss of 13.4 which and accuracy of 61.2%. This means the amount the model penelizes for incorrect predictions 13.4 but it only predicted 61% of the primary causes of accidents accurately.
+From the models feature importance plot below, we can see the most influential features are:
+* Driver’s Action - Improper Backing.
+* First Crash Type - Animal.
+* Driver’s Action - Disregarded Control Devices.
 
-Its total recall is 61.2% which is the total amount of times the model classified the cause of an accident was a category correctly out of the total amount of times that category was indeed the cause.
+<img src='images/features.PNG' width='1000%'/>
 
-Its total precision is 62% and this is the total amount of times the model classified the cause of an accident was a category correctly out of the total amount of the predictions made for that category.
+The model gave a log loss of 12.5 which and accuracy of 64%. This means the amount the model penelizes for incorrect predictions 12.5 but it only predicted 64% of the primary causes of accidents accurately.
+
+Its total recall is 64% which is the total amount of times the model classified the cause of an accident was a category correctly out of the total amount of times that category was indeed the cause.
+
+Its total precision is 64% and this is the total amount of times the model classified the cause of an accident was a category correctly out of the total amount of the predictions made for that category.
 
   <img src='images/roc.PNG' width='1000%'/>
 
