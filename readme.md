@@ -5,7 +5,7 @@
 <a href="https://github.com/ariavathlete/chicago_primary_cause_of-caraccidents/blob/master/Tesla_Full_Autonomy.pdf">| BLOG</a>
 
 
-   <img src='images/Input.png' width='75%'/>
+   <img src='images/Input.png' width='75%'/><img src='images/Result.png' width='75%'/>
    
    Amazon EC2 Link - http://ec2-18-221-241-166.us-east-2.compute.amazonaws.com:5000/
 
