@@ -3,3 +3,4 @@
 .csv filter=lfs diff=lfs merge=lfs -text
 ppl.csv filter=lfs diff=lfs merge=lfs -text
 crashes.csv filter=lfs diff=lfs merge=lfs -text
+veh.csv filter=lfs diff=lfs merge=lfs -text
