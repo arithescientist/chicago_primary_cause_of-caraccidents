@@ -298,7 +298,7 @@ def upload():
 ##################################
     
 
-        return render_template('results.html', predictions=result)
+        return render_template('index.html', predictions=result)
     return None
 
 

@@ -4,24 +4,75 @@
 	<title></title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script>   
+    url = 'https://github.com/mozilla/pdf.js/blob/master/test/pdfs/tracemonkey.pdf';
+    var thePdf = null;
+    var scale = 3;
+
+    PDFJS.getDocument(url).promise.then(function(pdf) {
+        thePdf = pdf;
+        viewer = document.getElementById('pdf-viewer');
+
+        for(page = 1; page <= pdf.numPages; page++) {
+          canvas = document.createElement("canvas");    
+          canvas.className = 'pdf-page-canvas';         
+          viewer.appendChild(canvas);            
+          renderPage(page, canvas);
+        }
+    });
+
+    function renderPage(pageNumber, canvas) {
+        thePdf.getPage(pageNumber).then(function(page) {
+          viewport = page.getViewport(scale);
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;          
+          page.render({canvasContext: canvas.getContext('2d'), viewport: viewport});
+    });
+    }
+</script>
+
 </head>
 <body>
 <style type="text/css">
 *{margin:0;padding:0;box-sizing:border-box}body,html{height:100%;font-family:Poppins-Regular,sans-serif}a{font-family:Poppins-Regular;font-size:14px;line-height:1.7;color:#666;margin:0;transition:all .4s;-webkit-transition:all .4s;-o-transition:all .4s;-moz-transition:all .4s}a:focus{outline:0!important}a:hover{text-decoration:none}h1,h2,h3,h4,h5,h6{margin:0}input{outline:0;border:none}input:focus::-webkit-input-placeholder{color:transparent}input:focus:-moz-placeholder{color:transparent}input:focus::-moz-placeholder{color:transparent}input:focus:-ms-input-placeholder{color:transparent}input::-webkit-input-placeholder{color:#adadad}input:-moz-placeholder{color:#adadad}input::-moz-placeholder{color:#adadad}input:-ms-input-placeholder{color:#adadad}button{outline:0!important;border:none;background:0 0}button:hover{cursor:pointer}.container{max-width:1200px}.container-contact100{width:100%;min-height:100vh;display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;padding:15px;background:#a64bf4;background:-webkit-linear-gradient(45deg,#00dbde,#fc00ff);background:-o-linear-gradient(45deg,#00dbde,#fc00ff);background:-moz-linear-gradient(45deg,#00dbde,#fc00ff);background:linear-gradient(45deg,#00dbde,#fc00ff)}.wrap-contact100{width:500px;background:#fff;border-radius:10px;overflow:hidden;padding:42px 55px 45px 55px}.contact100-form{width:100%}.contact100-form-title{display:block;font-family:Poppins-Bold;font-size:39px;color:#333;line-height:1.2;text-align:center;padding-bottom:10px}.wrap-input100{width:100%;position:relative;border-bottom:2px solid #d9d9d9;padding-bottom:10px;margin-bottom:15px}.input100{display:block;width:100%;background:0 0;font-family:Poppins-Medium;font-size:18px;color:#333;line-height:1.2;padding:0 5px}.focus-input100{position:absolute;display:block;width:100%;height:100%;top:0;left:0;pointer-events:none}.focus-input100::before{content:"";display:block;position:absolute;bottom:-2px;left:0;width:0;height:2px;-webkit-transition:all .4s;-o-transition:all .4s;-moz-transition:all .4s;transition:all .4s;background:#7f7f7f}input.input100{height:40px}.input100:focus+.focus-input100::before{width:100%}.has-val.input100+.focus-input100::before{width:100%}.container-contact100-form-btn{display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;flex-wrap:wrap;justify-content:center;padding-top:13px}.wrap-contact100-form-btn{width:100%;display:block;position:relative;z-index:1;border-radius:25px;overflow:hidden;margin:0 auto}.contact100-form-bgbtn{position:absolute;z-index:-1;width:300%;height:100%;background:#a64bf4;background:-webkit-linear-gradient(left,#00dbde,#fc00ff,#00dbde,#fc00ff);background:-o-linear-gradient(left,#00dbde,#fc00ff,#00dbde,#fc00ff);background:-moz-linear-gradient(left,#00dbde,#fc00ff,#00dbde,#fc00ff);background:linear-gradient(left,#00dbde,#fc00ff,#00dbde,#fc00ff);top:0;left:-100%;-webkit-transition:all .4s;-o-transition:all .4s;-moz-transition:all .4s;transition:all .4s}.contact100-form-btn{display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;justify-content:center;align-items:center;padding:0 20px;width:100%;height:50px;font-family:Poppins-Medium;font-size:16px;color:#fff;line-height:1.2}.wrap-contact100-form-btn:hover .contact100-form-bgbtn{left:0}.contact100-form-btn i{-webkit-transition:all .4s;-o-transition:all .4s;-moz-transition:all .4s;transition:all .4s}.contact100-form-btn:hover i{-webkit-transform:translateX(10px);-moz-transform:translateX(10px);-ms-transform:translateX(10px);-o-transform:translateX(10px);transform:translateX(10px)}@media (max-width:576px){.wrap-contact100{padding:72px 15px 65px 15px}}.wrap-contact100{width:800px;background:#fff;border-radius:10px;overflow:hidden;padding:42px 55px 45px 55px}.contact100-form-title{font-size:26px}
+  #pdf-viewer {
+    width: 100%;
+    height: 300px;
+    background: rgba(0, 0, 0, 0.1);
+    overflow: auto;
+  }
+
+  .pdf-page-canvas {
+    display: block;
+    margin: 5px auto;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+  }
+
 </style>
-
+<center>
+		
+			<div class="item">
+				<a href="https://github.com/ariavathlete/chicago_primary_cause_of-caraccidents"><i class="github icon"></i>Github</a> 
+			</div>
+		
 	<div class="container-contact100">
-					      	<div class="item">
-					        	<a href="https://github.com/ariavathlete/chicago_primary_cause_of-caraccidents"><i class="github icon"></i>Github</a> 
-					      	</div>
 
-		<img src="https://i.imgur.com/IhSmjKq.jpg" width="100%" height="100%">
-		<br>
+	<br>
 		<div class="wrap-contact100">
 		
 			<form class="contact100-form validate-form" action="/predict"  method="GET">
 				<span class="contact100-form-title" style="font-size:32px">CAR CRASH MAIN INFLUENCER</span>
-				 				
+				 		
+		<div>
+						<object data="{{ url_for('static', filename='pdfs/web/Analysis of Car Accidents In Chicago.pdf') }}" type="application/pdf" width="100%" height="100%" id="pdf-viewer">
+				</object>
+
+				</div>
+<br>		<div class="wrap-input100 " >
+					<span class="contact100-form-title" style="color: #ff0000;" > {{ predictions }} </span>
+				</div>
+
 				<div class="wrap-input100 " >
 					<span class="label-input100">SPEED LIMIT</span>
 					<input class="input100" type="text" id="SPEED LIMIT" name="SPEED LIMIT" placeholder="SPEED LIMIT (mph) ex: 24" required>
@@ -165,35 +216,13 @@
 						<button class="contact100-form-btn" id='submit' type="submit" value="Upload" method="GET">Submit</button>
 						
 					</div>
-		<center>
-					<p>
-					<br>
-					<div>
-						<img src="https://i.imgur.com/W2F8wLg.png" width="100%" height="100%">
-						<img src="https://i.imgur.com/cl65k2Y.jpg" width="100%" height="100%">
-						<img src="https://i.imgur.com/1NCYEZi.jpg" width="100%" height="100%">
-						<img src="https://i.imgur.com/o3AJGZS.jpg" width="100%" height="100%">
-						<img src="https://i.imgur.com/62RzISd.jpg" width="100%" height="100%">
-						<img src="https://i.imgur.com/Yoj7O4f.jpg" width="100%" height="100%">
-						<img src="https://i.imgur.com/b6n3Sao.jpg" width="100%" height="100%">
-						<img src="https://i.imgur.com/qXJpBGP.png" width="100%" height="100%">
-						<img src="https://i.imgur.com/hZ3ad5s.jpg" width="100%" height="100%">
-						<img src="https://i.imgur.com/2Dj33zL.jpg" width="100%" height="100%">
-						<img src="https://i.imgur.com/Iy6iO1I.jpg" width="100%" height="100%">
-						<img src="https://i.imgur.com/07KyWig.png" width="100%" height="100%">
-						<img src="https://i.imgur.com/gVzWVGr.png" width="100%" height="100%">
-						<img src="https://i.imgur.com/IAziWhR.png" width="100%" height="100%">
-						
-					</div>
-				</p>
-			</center>
 				</div>
 			</form>
 		</div>
 	</div>
 
 
-
+</center>
 </body>
 </html>
 
