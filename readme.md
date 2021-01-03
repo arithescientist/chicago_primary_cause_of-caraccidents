@@ -5,8 +5,8 @@
 <a href="https://github.com/ariavathlete/chicago_primary_cause_of-caraccidents/blob/master/Tesla_Full_Autonomy.pdf">| BLOG</a>
 
 
-   <img src='images/Input.png' width='75%'/><img src='images/Result.png' width='75%'/>
-   <img src='images/Input2.png' width='75%'/><img src='images/Result.png' width='75%'/>
+   <img src='images/Input.png' width='75%'/><img src='images/Input.png' width='75%'/>
+ 
    
    Amazon EC2 Link - http://aridavinci.com:5000/indexc.html
 
@@ -31,11 +31,11 @@
 
 - Install the requirements and setup the development environment.
 
-	`pip3 install -r requirements.txt`
+   `pip3 install -r requirements.txt`
 
 - Run the application.
 
-	`python3 app.py`
+   `python3 app.py`
 
 - Navigate to `localhost:5000`.
 
