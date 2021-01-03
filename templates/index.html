@@ -1,231 +1,473 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title></title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <title>Accident Classifier</title>
 
-<script>   
-    url = 'https://github.com/mozilla/pdf.js/blob/master/test/pdfs/tracemonkey.pdf';
-    var thePdf = null;
-    var scale = 3;
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+   <!--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+   <!--  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous"> -->
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico"/>
 
-    PDFJS.getDocument(url).promise.then(function(pdf) {
-        thePdf = pdf;
-        viewer = document.getElementById('pdf-viewer');
 
-        for(page = 1; page <= pdf.numPages; page++) {
-          canvas = document.createElement("canvas");    
-          canvas.className = 'pdf-page-canvas';         
-          viewer.appendChild(canvas);            
-          renderPage(page, canvas);
+    <link href="{{ url_for('static', filename='assets/css/loader.css') }}" rel="stylesheet" type="text/css" />
+    <script src="{{ url_for('static', filename='assets/js/loader.js') }}"></script>
+
+    <script src="https://d3js.org/d3-queue.v3.min.js"></script>
+
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href="{{ url_for('static', filename='plugins/apex/apexcharts.css') }}" rel="stylesheet" type="text/css">
+    <script src="{{ url_for('static', filename='plugins/apex/apexcharts.min.js') }}"></script>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+    <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='assets/css/plugins.css') }}" rel="stylesheet" type="text/css" />
+    <!-- END GLOBAL MANDATORY STYLES -->
+
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.22.3/apexcharts.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js" type="text/javascript"></script>
+    <!-- <link href="{{ url_for('static', filename='plugins/apex/apexcharts.css') }}" rel="stylesheet" type="text/css"> -->
+
+    <link href="{{ url_for('static', filename='assets/css/dashboard/dash_1.css') }}" rel="stylesheet" type="text/css" />
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.22.3/apexcharts.css" rel="stylesheet" type="text/css" />
+
+    <style>
+        html {
+            font-size: 14px;
         }
-    });
 
-    function renderPage(pageNumber, canvas) {
-        thePdf.getPage(pageNumber).then(function(page) {
-          viewport = page.getViewport(scale);
-          canvas.height = viewport.height;
-          canvas.width = viewport.width;          
-          page.render({canvasContext: canvas.getContext('2d'), viewport: viewport});
-    });
-    }
-</script>
+        .container {
+            max-width: 500px;
+        }
 
+        .pricing-header {
+            max-width: 700px;
+        }
+
+        .card-deck .card {
+            min-width: 150px;
+        }
+
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            html {
+                font-size: 16px;
+            }
+
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+            <style type="text/css">
+            *{margin:0;padding:0;box-sizing:border-box}body,html{height:100%;font-family:Poppins-Regular,sans-serif}a{font-family:Poppins-Regular;font-size:14px;line-height:1.7;color:#666;margin:0;transition:all .4s;-webkit-transition:all .4s;-o-transition:all .4s;-moz-transition:all .4s}a:focus{outline:0!important}a:hover{text-decoration:none}h1,h2,h3,h4,h5,h6{margin:0}input{outline:0;border:none}input:focus::-webkit-input-placeholder{color:transparent}input:focus:-moz-placeholder{color:transparent}input:focus::-moz-placeholder{color:transparent}input:focus:-ms-input-placeholder{color:transparent}input::-webkit-input-placeholder{color:#adadad}input:-moz-placeholder{color:#adadad}input::-moz-placeholder{color:#adadad}input:-ms-input-placeholder{color:#adadad}button{outline:0!important;border:none;background:0 0}button:hover{cursor:pointer}.container{max-width:1200px}.container-contact100{width:100%;min-height:100vh;display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;padding:15px;background:#a64bf4;background:-webkit-linear-gradient(45deg,#00dbde,#fc00ff);background:-o-linear-gradient(45deg,#00dbde,#fc00ff);background:-moz-linear-gradient(45deg,#00dbde,#fc00ff);background:linear-gradient(45deg,#00dbde,#fc00ff)}.wrap-contact100{width:500px;background:#fff;border-radius:10px;overflow:hidden;padding:42px 55px 45px 55px}.contact100-form{width:100%}.contact100-form-title{display:block;font-family:Poppins-Bold;font-size:39px;color:#333;line-height:1.2;text-align:center;padding-bottom:10px}.wrap-input100{width:100%;position:relative;border-bottom:2px solid #d9d9d9;padding-bottom:10px;margin-bottom:15px}.input100{display:block;width:100%;background:0 0;font-family:Poppins-Medium;font-size:18px;color:#333;line-height:1.2;padding:0 5px}.focus-input100{position:absolute;display:block;width:100%;height:100%;top:0;left:0;pointer-events:none}.focus-input100::before{content:"";display:block;position:absolute;bottom:-2px;left:0;width:0;height:2px;-webkit-transition:all .4s;-o-transition:all .4s;-moz-transition:all .4s;transition:all .4s;background:#7f7f7f}input.input100{height:40px}.input100:focus+.focus-input100::before{width:100%}.has-val.input100+.focus-input100::before{width:100%}.container-contact100-form-btn{display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;flex-wrap:wrap;justify-content:center;padding-top:13px}.wrap-contact100-form-btn{width:100%;display:block;position:relative;z-index:1;border-radius:25px;overflow:hidden;margin:0 auto}.contact100-form-bgbtn{position:absolute;z-index:-1;width:300%;height:100%;background:#a64bf4;background:-webkit-linear-gradient(left,#00dbde,#fc00ff,#00dbde,#fc00ff);background:-o-linear-gradient(left,#00dbde,#fc00ff,#00dbde,#fc00ff);background:-moz-linear-gradient(left,#00dbde,#fc00ff,#00dbde,#fc00ff);background:linear-gradient(left,#00dbde,#fc00ff,#00dbde,#fc00ff);top:0;left:-100%;-webkit-transition:all .4s;-o-transition:all .4s;-moz-transition:all .4s;transition:all .4s}.contact100-form-btn{display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;justify-content:center;align-items:center;padding:0 20px;width:100%;height:50px;font-family:Poppins-Medium;font-size:16px;color:#fff;line-height:1.2}.wrap-contact100-form-btn:hover .contact100-form-bgbtn{left:0}.contact100-form-btn i{-webkit-transition:all .4s;-o-transition:all .4s;-moz-transition:all .4s;transition:all .4s}.contact100-form-btn:hover i{-webkit-transform:translateX(10px);-moz-transform:translateX(10px);-ms-transform:translateX(10px);-o-transform:translateX(10px);transform:translateX(10px)}@media (max-width:576px){.wrap-contact100{padding:72px 15px 65px 15px}}.wrap-contact100{width:800px;background:#fff;border-radius:10px;overflow:hidden;padding:42px 55px 45px 55px}.contact100-form-title{font-size:26px}
+              #pdf-viewer {
+                width: 100%;
+                height: 350px;
+                background: rgba(0, 0, 0, 0.1);
+                overflow: auto;
+              }
+
+              .pdf-page-canvas {
+                display: block;
+                margin: 5px auto;
+                border: 1px solid rgba(0, 0, 0, 0.2);
+              }
+
+            </style>
+    <style type="text/css">
+      #pdf-viewer {
+        width: 100%;
+        height: 450px;
+        background: rgba(0, 0, 0, 0.1);
+        overflow: auto;
+      }
+
+      .pdf-page-canvas {
+        display: block;
+        margin: 5px auto;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+      }
+    </style>
+
+    <script>   
+        url = 'https://github.com/mozilla/pdf.js/blob/master/test/pdfs/tracemonkey.pdf';
+        var thePdf = null;
+        var scale = 3;
+
+        PDFJS.getDocument(url).promise.then(function(pdf) {
+            thePdf = pdf;
+            viewer = document.getElementById('pdf-viewer');
+
+            for(page = 1; page <= pdf.numPages; page++) {
+              canvas = document.createElement("canvas");    
+              canvas.className = 'pdf-page-canvas';         
+              viewer.appendChild(canvas);            
+              renderPage(page, canvas);
+            }
+        });
+
+        function renderPage(pageNumber, canvas) {
+            thePdf.getPage(pageNumber).then(function(page) {
+              viewport = page.getViewport(scale);
+              canvas.height = viewport.height;
+              canvas.width = viewport.width;          
+              page.render({canvasContext: canvas.getContext('2d'), viewport: viewport});
+        });
+        }
+    </script>
 </head>
 <body>
-<style type="text/css">
-*{margin:0;padding:0;box-sizing:border-box}body,html{height:100%;font-family:Poppins-Regular,sans-serif}a{font-family:Poppins-Regular;font-size:14px;line-height:1.7;color:#666;margin:0;transition:all .4s;-webkit-transition:all .4s;-o-transition:all .4s;-moz-transition:all .4s}a:focus{outline:0!important}a:hover{text-decoration:none}h1,h2,h3,h4,h5,h6{margin:0}input{outline:0;border:none}input:focus::-webkit-input-placeholder{color:transparent}input:focus:-moz-placeholder{color:transparent}input:focus::-moz-placeholder{color:transparent}input:focus:-ms-input-placeholder{color:transparent}input::-webkit-input-placeholder{color:#adadad}input:-moz-placeholder{color:#adadad}input::-moz-placeholder{color:#adadad}input:-ms-input-placeholder{color:#adadad}button{outline:0!important;border:none;background:0 0}button:hover{cursor:pointer}.container{max-width:1200px}.container-contact100{width:100%;min-height:100vh;display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;padding:15px;background:#a64bf4;background:-webkit-linear-gradient(45deg,#00dbde,#fc00ff);background:-o-linear-gradient(45deg,#00dbde,#fc00ff);background:-moz-linear-gradient(45deg,#00dbde,#fc00ff);background:linear-gradient(45deg,#00dbde,#fc00ff)}.wrap-contact100{width:500px;background:#fff;border-radius:10px;overflow:hidden;padding:42px 55px 45px 55px}.contact100-form{width:100%}.contact100-form-title{display:block;font-family:Poppins-Bold;font-size:39px;color:#333;line-height:1.2;text-align:center;padding-bottom:10px}.wrap-input100{width:100%;position:relative;border-bottom:2px solid #d9d9d9;padding-bottom:10px;margin-bottom:15px}.input100{display:block;width:100%;background:0 0;font-family:Poppins-Medium;font-size:18px;color:#333;line-height:1.2;padding:0 5px}.focus-input100{position:absolute;display:block;width:100%;height:100%;top:0;left:0;pointer-events:none}.focus-input100::before{content:"";display:block;position:absolute;bottom:-2px;left:0;width:0;height:2px;-webkit-transition:all .4s;-o-transition:all .4s;-moz-transition:all .4s;transition:all .4s;background:#7f7f7f}input.input100{height:40px}.input100:focus+.focus-input100::before{width:100%}.has-val.input100+.focus-input100::before{width:100%}.container-contact100-form-btn{display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;flex-wrap:wrap;justify-content:center;padding-top:13px}.wrap-contact100-form-btn{width:100%;display:block;position:relative;z-index:1;border-radius:25px;overflow:hidden;margin:0 auto}.contact100-form-bgbtn{position:absolute;z-index:-1;width:300%;height:100%;background:#a64bf4;background:-webkit-linear-gradient(left,#00dbde,#fc00ff,#00dbde,#fc00ff);background:-o-linear-gradient(left,#00dbde,#fc00ff,#00dbde,#fc00ff);background:-moz-linear-gradient(left,#00dbde,#fc00ff,#00dbde,#fc00ff);background:linear-gradient(left,#00dbde,#fc00ff,#00dbde,#fc00ff);top:0;left:-100%;-webkit-transition:all .4s;-o-transition:all .4s;-moz-transition:all .4s;transition:all .4s}.contact100-form-btn{display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;justify-content:center;align-items:center;padding:0 20px;width:100%;height:50px;font-family:Poppins-Medium;font-size:16px;color:#fff;line-height:1.2}.wrap-contact100-form-btn:hover .contact100-form-bgbtn{left:0}.contact100-form-btn i{-webkit-transition:all .4s;-o-transition:all .4s;-moz-transition:all .4s;transition:all .4s}.contact100-form-btn:hover i{-webkit-transform:translateX(10px);-moz-transform:translateX(10px);-ms-transform:translateX(10px);-o-transform:translateX(10px);transform:translateX(10px)}@media (max-width:576px){.wrap-contact100{padding:72px 15px 65px 15px}}.wrap-contact100{width:800px;background:#fff;border-radius:10px;overflow:hidden;padding:42px 55px 45px 55px}.contact100-form-title{font-size:26px}
-  #pdf-viewer {
-    width: 100%;
-    height: 300px;
-    background: rgba(0, 0, 0, 0.1);
-    overflow: auto;
-  }
+      <!-- BEGIN LOADER -->
+      <div id="load_screen"> 
+        <div class="loader"> 
+          <div class="loader-content">
+              <div class="spinner-grow align-self-center"></div>
+          </div>
+        </div>
+      </div>
+          <!--  END LOADER -->
 
-  .pdf-page-canvas {
-    display: block;
-    margin: 5px auto;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-  }
+    <!--  BEGIN NAVBAR  -->
+    <div class="header-container fixed-top">
+        <header class="header navbar navbar-expand-sm">
+            <ul class="navbar-item theme-brand flex-row  text-center">
 
-</style>
-<center>
-		
-			<div class="item">
-				<a href="https://github.com/ariavathlete/chicago_primary_cause_of-caraccidents"><i class="github icon"></i>Github</a> 
-			</div>
-		
-	<div class="container-contact100">
+                <li class="nav-item theme-logo">
+                    <a>
+                        <img src="{{ url_for('static', filename='assets/img/logo.jpg') }}" class="navbar-logo" alt="logo">
+                    </a>
+                </li>
+                <li class="nav-item theme-text">
+                    <a class="nav-link"> AC  </a>
+                </li>
+            </ul>
 
-	<br>
-		<div class="wrap-contact100">
-		
-			<form class="contact100-form validate-form" action="/predict"  method="GET">
-				<span class="contact100-form-title" style="font-size:32px">CAR CRASH MAIN INFLUENCER</span>
-				 		
-		<div>
-						<object data="{{ url_for('static', filename='pdfs/web/Analysis of Car Accidents In Chicago.pdf') }}" type="application/pdf" width="100%" height="100%" id="pdf-viewer">
-				</object>
+            <ul class="navbar-item flex-row ml-md-0 ml-auto">
+                <li class="nav-item align-self-center search-animated">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search toggle-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <form class="form-inline search-full form-inline search" role="search">
+                        <div class="search-bar">
+                            <input type="text" class="form-control search-form-control  ml-lg-auto" placeholder="Search...">
+                        </div>
+                    </form>
+                </li>
+            </ul>
+            <ul class="navbar-item flex-row ml-md-auto">
+                <li class="nav-item theme-text">
+                    <a class="nav-link"> Ari Iwunze </a>
+                </li>
+                <li class="nav-item dropdown language-dropdown">
+                    <a href="javascript:void(0);" class="nav-link dropdown-toggle" id="language-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="{{ url_for('static', filename='assets/img/git.png') }}" class="flag-width" alt="flag">
+                    </a>
+                    <div class="dropdown-menu position-absolute" aria-labelledby="language-dropdown">
+                        <a class="dropdown-item d-flex" href="https://github.com/ariavathlete/spf"><span class="align-self-center">&nbsp;SPF Code</span></a>
+                        <a class="dropdown-item d-flex" href="https://github.com/ariavathlete/aidiagnosis"><span class="align-self-center">&nbsp;iDiagnosis Code</span></a>
+                        <a class="dropdown-item d-flex" href="https://github.com/ariavathlete/chicago_primary_cause_of-caraccidents"><span class="align-self-center">&nbsp;AC Code</span></a>
+                        
+                    </div>
+                </li>
 
-				</div>
-<br>		<div class="wrap-input100 " >
-					<span class="contact100-form-title" style="color: #ff0000;" > {{ predictions }} </span>
-				</div>
+                <li class="nav-item dropdown language-dropdown">
+                    <a href="javascript:void(0);" class="nav-link dropdown-toggle" id="language-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="{{ url_for('static', filename='assets/img/ca.png') }}" class="flag-width" alt="flag">
+                    </a>
+                    <div class="dropdown-menu position-absolute" aria-labelledby="language-dropdown">
+                        <a class="dropdown-item d-flex" href="javascript:void(0);"><img src="{{ url_for('static', filename='assets/img/de.png') }}" class="flag-width" alt="flag"> <span class="align-self-center">&nbsp;Ge</span></a>
+                        <a class="dropdown-item d-flex" href="javascript:void(0);"><img src="{{ url_for('static', filename='assets/img/jp.png') }}" class="flag-width" alt="flag"> <span class="align-self-center">&nbsp;Ja</span></a>
+                        <a class="dropdown-item d-flex" href="javascript:void(0);"><img src="{{ url_for('static', filename='assets/img/fr.png') }}" class="flag-width" alt="flag"> <span class="align-self-center">&nbsp;Fr</span></a>
+                        <a class="dropdown-item d-flex" href="javascript:void(0);"><img src="{{ url_for('static', filename='assets/img/ca.png') }}" class="flag-width" alt="flag"> <span class="align-self-center">&nbsp;En</span></a>
+                    </div>
+                </li>
+            </ul>
+        </header>
+    </div>
+    <div class="sub-header-container">
+    <header class="header navbar navbar-expand-sm">
+        <a href="javascript:void(0);" class="sidebarCollapse" data-placement="bottom"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></a>
+        <ul class="navbar-nav flex-row">
+            <li>
+                <div class="page-header">
+                    <nav class="breadcrumb-one" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="javascript:void(0);">Dashboard</a></li>
+                            </ol>
+                        </nav>
 
-				<div class="wrap-input100 " >
-					<span class="label-input100">SPEED LIMIT</span>
-					<input class="input100" type="text" id="SPEED LIMIT" name="SPEED LIMIT" placeholder="SPEED LIMIT (mph) ex: 24" required>
-					<span class="focus-input100"></span>
-				</div>
-				
-				<div class="wrap-input100 " >
-					<span class="label-input100">AGE</span>
-					<input class="input100" type="text" id="AGE" name="AGE" placeholder="AGE ex: 24" required>
-					<span class="focus-input100"></span>
-				</div>
-
-
-				<div class="wrap-input100" style="border-bottom: 0px;" >
-					<span class="label-input100">DRIVER VISION</span>
-						<select class="input100"  id="DRIVER VISION" name="DRIVER VISION" style="padding: 10px 5px;margin-top: 15px;border: 2px solid #d9d9d9;" required>
-							<option value="">SELECT DRIVER VISION</option>
-							<option value="BLINDED - SUNLIGHT">BLINDED - SUNLIGHT</option>
-							<option value="BLOWING MATERIALS">BLOWING MATERIALS</option>
-							<option value="BUILDINGS">BUILDINGS</option>
-							<option value="EMBANKMENT">EMBANKMENT</option>
-							<option value="HILLCREST">HILLCREST</option>
-							<option value="MOVING VEHICLES">MOVING VEHICLES</option>
-							<option value="NOT OBSCURED">NOT OBSCURED</option>
-							<option value="OTHER">OTHER</option>
-							<option value="PARKED VEHICLES">PARKED VEHICLES</option>
-							<option value="SIGNBOARD">SIGNBOARD</option>
-							<option value="TREES, PLANTS">TREES, PLANTS</option>
-							<option value="UNKNOWN">UNKNOWN</option>
-							<option value="WINDSHIELD (WATER/ICE)">WINDSHIELD (WATER/ICE)</option>
-						</select>
-					<span class="focus-input100"></span>
-				</div>
-				<div class="wrap-input100" style="border-bottom: 0px;" >
-					<span class="label-input100">DRIVER ACTION</span>
-						<select class="input100"  id="DRIVER ACTION" name="DRIVER ACTION" style="padding: 10px 5px;margin-top: 15px;border: 2px solid #d9d9d9;" required>
-							<option value="">SELECT DRIVER ACTION</option>
-							<option value="DISREGARDED CONTROL DEVICES">DISREGARDED CONTROL DEVICES</option>
-							<option value="EMERGENCY VEHICLE ON CALL">EMERGENCY VEHICLE ON CALL</option>
-							<option value="EVADING POLICE VEHICLE">EVADING POLICE VEHICLE</option>
-							<option value="FAILED TO YIELD">FAILED TO YIELD</option>
-							<option value="FOLLOWED TOO CLOSELY">FOLLOWED TOO CLOSELY</option>
-							<option value="IMPROPER BACKING">IMPROPER BACKING</option>
-							<option value="IMPROPER LANE CHANGE">IMPROPER LANE CHANGE</option>
-							<option value="IMPROPER PARKING">IMPROPER PARKING</option>
-							<option value="IMPROPER PASSING">IMPROPER PASSING</option>
-							<option value="IMPROPER TURN">IMPROPER TURN</option>
-							<option value="LICENSE RESTRICTIONS">LICENSE RESTRICTIONS</option>
-							<option value="NONE">NONE</option>
-							<option value="OTHER">OTHER</option>
-							<option value="OVERCORRECTED">OVERCORRECTED</option>
-							<option value="STOPPED SCHOOL BUS">STOPPED SCHOOL BUS</option>
-							<option value="TEXTING">TEXTING</option>
-							<option value="TOO FAST FOR CONDITIONS">TOO FAST FOR CONDITIONS</option>
-							<option value="UNKNOWN">UNKNOWN</option>
-							<option value="WRONG WAY/SID">WRONG WAY/SID</option>
-							
-						</select>
-					<span class="focus-input100"></span>
-				</div>
-				<div class="wrap-input100" style="border-bottom: 0px;" >
-					<span class="label-input100">PHYSICAL CONDITION</span>
-						<select class="input100"  id="PHYSICAL CONDITION" name="PHYSICAL CONDITION" style="padding: 10px 5px;margin-top: 15px;border: 2px solid #d9d9d9;" required>
-							<option value="">SELECT PHYSICAL CONDITION</option>
-							<option value="FATIGUED/ASLEEP">FATIGUED/ASLEEP</option>
-							<option value="HAD BEEN DRINKING">HAD BEEN DRINKING</option>
-							<option value="ILLNESS/FAINTED">ILLNESS/FAINTED</option>
-							<option value="IMPAIRED - ALCOHOL">IMPAIRED - ALCOHOL</option>
-							<option value="IMPAIRED - ALCOHOL AND DRUGS">IMPAIRED - ALCOHOL AND DRUGS</option>
-							<option value="IMPAIRED - DRUGS">IMPAIRED - DRUGS</option>
-							<option value="MEDICATED">MEDICATED</option>
-							<option value="NORMAL">NORMAL</option>
-							<option value="OTHER">OTHER</option>
-							<option value="REMOVED BY EMS">REMOVED BY EMS</option>
-							<option value="UNKNOWN">UNKNOWN</option>
-							
-						</select>
-					<span class="focus-input100"></span>
-				</div>
-
-				<div class="wrap-input100" style="border-bottom: 0px;" >
-					<span class="label-input100">ROADWAY CONDITION</span>
-						<select class="input100"  id="ROADWAY CONDITION" name="ROADWAY CONDITION" style="padding: 10px 5px;margin-top: 15px;border: 2px solid #d9d9d9;" required>
-							<option value="">SELECT ROADWAY CONDITION</option>
-							<option value="ICE">ICE</option>
-							<option value="OTHER">OTHER</option>
-							<option value="SAND, MUD, DIRT">SAND, MUD, DIRT</option>
-							<option value="SNOW OR SLUSH">SNOW OR SLUSH</option>
-							<option value="UNKNOWN">UNKNOWN</option>
-							<option value="WET">WET</option>
-							
-						</select>
-					<span class="focus-input100"></span>
-				</div>
-				
-				<div class="wrap-input100" style="border-bottom: 0px;" >
-					<span class="label-input100">DEVICE CONDITION</span>
-						<select class="input100"  id="DEVICE CONDITION" name="DEVICE CONDITION" style="padding: 10px 5px;margin-top: 15px;border: 2px solid #d9d9d9;" required>
-							<option value="">SELECT DEVICE CONDITION</option>
-							<option value="FUNCTIONING PROPERLY">FUNCTIONING PROPERLY</option>
-							<option value="MISSING">MISSING</option>
-							<option value="NO CONTROLS">NO CONTROLS</option>
-							<option value="NOT FUNCTIONING">NOT FUNCTIONING</option>
-							<option value="OTHER">OTHER</option>
-							<option value="UNKNOWN">UNKNOWN</option>
-							<option value="WORN REFLECTIVE MATERIAL">WORN REFLECTIVE MATERIAL</option>
-							
-						</select>
-					<span class="focus-input100"></span>
-				</div>
-
-				<div class="wrap-input100" style="border-bottom: 0px;" >
-					<span class="label-input100">FIRST CRASH TYPE</span>
-						<select class="input100"  id="FIRST CRASH TYPE" name="FIRST CRASH TYPE" style="padding: 10px 5px;margin-top: 15px;border: 2px solid #d9d9d9;" required>
-							<option value="">SELECT FIRST CRASH TYPE</option>
-							<option value="ANIMAL">ANIMAL</option>
-							<option value="FIXED OBJECT">FIXED OBJECT</option>
-							<option value="HEAD ON">HEAD ON</option>
-							<option value="OTHER NONCOLLISION">OTHER NONCOLLISION</option>
-							<option value="OTHER OBJECT">OTHER OBJECT</option>
-							<option value="OVERTURNED">OVERTURNED</option>
-							<option value="PARKED MOTOR VEHICLE">PARKED MOTOR VEHICLE</option>
-							<option value="PEDALCYCLIST">PEDALCYCLIST</option>
-							<option value="PEDESTRIAN">PEDESTRIAN</option>
-							<option value="REAR END">REAR END</option>
-							<option value="REAR TO FRONT">REAR TO FRONT</option>
-							<option value="REAR TO REAR">REAR TO REAR</option>
-							<option value="REAR TO SIDE">REAR TO SIDE</option>
-							<option value="SIDESWIPE OPPOSITE DIRECTION">SIDESWIPE OPPOSITE DIRECTION</option>
-							<option value="SIDESWIPE SAME DIRECTION">SIDESWIPE SAME DIRECTION</option>
-							<option value="TRAIN">TRAIN</option>
-							<option value="TURNING">TURNING</option>							
-							
-						</select>
-					<span class="focus-input100"></span>
-				</div>
-				<div class="container-contact100-form-btn">
-					<div class="wrap-contact100-form-btn">
-						<div class="contact100-form-bgbtn"></div>
-						
-						<button class="contact100-form-btn" id='submit' type="submit" value="Upload" method="GET">Submit</button>
-						
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
+                    </div>
+                </li>
+            </ul>
+        </header>
+    </div>
+    <!--  BEGIN MAIN CONTAINER  -->
+    <div class="main-container" id="container">
+                <div class="overlay"></div>
+                <div class="search-overlay"></div>
+                <!--  BEGIN SIDEBAR  -->
+                <div class="sidebar-wrapper sidebar-theme">
+                    <nav id="sidebar">
+                        <div class="shadow-bottom"></div>
+                        <ul class="list-unstyled menu-categories" id="accordionExample">        
+                            <li class="menu">
+                                <a href="#app" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                                    <div class="">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-cpu"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+                                        <span>Apps</span>
+                                    </div>
+                                    <div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                    </div>
+                                </a>
+                                <ul class="collapse submenu list-unstyled" id="app" data-parent="#accordionExample">
+                                    <li>
+                                        <a href="{{ url_for('index') }}"> Accident Classifier </a>
+                                    </li>                            
+                                </ul>
+                            </li>
 
 
-</center>
+
+                        </ul>
+                        <!-- <div class="shadow-bottom"></div> -->
+                        
+                    </nav>
+
+                </div>
+
+                <!--  END SIDEBAR  -->
+
+          <!--  BEGIN CONTENT AREA  -->
+            
+    <div id="content" class="main-content">
+                     
+        <div class="layout-px-spacing">
+            <div class="row layout-top-spacing">    
+                <div class="container-contact100">
+
+                <br>
+                    <div class="wrap-contact100">
+                    
+                        <form class="contact100-form validate-form" action="/predict"  method="GET">
+                            <span class="contact100-form-title" style="font-size:32px">ACCIDENT CLASSIFIER</span>
+                                    
+                        <div>
+                                    <object data="{{ url_for('static', filename='pdfs/web/Analysis of Car Accidents In Chicago.pdf') }}" type="application/pdf" width="100%" height="100%" id="pdf-viewer">
+                            </object>
+
+                            </div>
+            <br>        
+            <div class="wrap-input100">
+                                <span class="contact100-form-title" style="color: #ff0000;" > {{ predictions }} </span>
+                            </div>
+
+                            <div class="wrap-input100 " >
+                                <span class="label-input100">SPEED LIMIT</span>
+                                <input class="input100" type="text" id="SPEED LIMIT" name="SPEED LIMIT" placeholder="SPEED LIMIT (mph) ex: 24" required>
+                                <span class="focus-input100"></span>
+                            </div>
+                            
+                            <div class="wrap-input100 " >
+                                <span class="label-input100">AGE</span>
+                                <input class="input100" type="text" id="AGE" name="AGE" placeholder="AGE ex: 24" required>
+                                <span class="focus-input100"></span>
+                            </div>
+
+
+                            <div class="wrap-input100" style="border-bottom: 0px;" >
+                                <span class="label-input100">DRIVER VISION</span>
+                                    <select class="input100"  id="DRIVER VISION" name="DRIVER VISION" style="padding: 10px 5px;margin-top: 15px;border: 2px solid #d9d9d9;" required>
+                                        <option value="">SELECT DRIVER VISION</option>
+                                        <option value="BLINDED - SUNLIGHT">BLINDED - SUNLIGHT</option>
+                                        <option value="BLOWING MATERIALS">BLOWING MATERIALS</option>
+                                        <option value="BUILDINGS">BUILDINGS</option>
+                                        <option value="EMBANKMENT">EMBANKMENT</option>
+                                        <option value="HILLCREST">HILLCREST</option>
+                                        <option value="MOVING VEHICLES">MOVING VEHICLES</option>
+                                        <option value="NOT OBSCURED">NOT OBSCURED</option>
+                                        <option value="OTHER">OTHER</option>
+                                        <option value="PARKED VEHICLES">PARKED VEHICLES</option>
+                                        <option value="SIGNBOARD">SIGNBOARD</option>
+                                        <option value="TREES, PLANTS">TREES, PLANTS</option>
+                                        <option value="UNKNOWN">UNKNOWN</option>
+                                        <option value="WINDSHIELD (WATER/ICE)">WINDSHIELD (WATER/ICE)</option>
+                                    </select>
+                                <span class="focus-input100"></span>
+                            </div>
+                            <div class="wrap-input100" style="border-bottom: 0px;" >
+                                <span class="label-input100">DRIVER ACTION</span>
+                                    <select class="input100"  id="DRIVER ACTION" name="DRIVER ACTION" style="padding: 10px 5px;margin-top: 15px;border: 2px solid #d9d9d9;" required>
+                                        <option value="">SELECT DRIVER ACTION</option>
+                                        <option value="DISREGARDED CONTROL DEVICES">DISREGARDED CONTROL DEVICES</option>
+                                        <option value="EMERGENCY VEHICLE ON CALL">EMERGENCY VEHICLE ON CALL</option>
+                                        <option value="EVADING POLICE VEHICLE">EVADING POLICE VEHICLE</option>
+                                        <option value="FAILED TO YIELD">FAILED TO YIELD</option>
+                                        <option value="FOLLOWED TOO CLOSELY">FOLLOWED TOO CLOSELY</option>
+                                        <option value="IMPROPER BACKING">IMPROPER BACKING</option>
+                                        <option value="IMPROPER LANE CHANGE">IMPROPER LANE CHANGE</option>
+                                        <option value="IMPROPER PARKING">IMPROPER PARKING</option>
+                                        <option value="IMPROPER PASSING">IMPROPER PASSING</option>
+                                        <option value="IMPROPER TURN">IMPROPER TURN</option>
+                                        <option value="LICENSE RESTRICTIONS">LICENSE RESTRICTIONS</option>
+                                        <option value="NONE">NONE</option>
+                                        <option value="OTHER">OTHER</option>
+                                        <option value="OVERCORRECTED">OVERCORRECTED</option>
+                                        <option value="STOPPED SCHOOL BUS">STOPPED SCHOOL BUS</option>
+                                        <option value="TEXTING">TEXTING</option>
+                                        <option value="TOO FAST FOR CONDITIONS">TOO FAST FOR CONDITIONS</option>
+                                        <option value="UNKNOWN">UNKNOWN</option>
+                                        <option value="WRONG WAY/SID">WRONG WAY/SID</option>
+                                        
+                                    </select>
+                                <span class="focus-input100"></span>
+                            </div>
+                            <div class="wrap-input100" style="border-bottom: 0px;" >
+                                <span class="label-input100">PHYSICAL CONDITION</span>
+                                    <select class="input100"  id="PHYSICAL CONDITION" name="PHYSICAL CONDITION" style="padding: 10px 5px;margin-top: 15px;border: 2px solid #d9d9d9;" required>
+                                        <option value="">SELECT PHYSICAL CONDITION</option>
+                                        <option value="FATIGUED/ASLEEP">FATIGUED/ASLEEP</option>
+                                        <option value="HAD BEEN DRINKING">HAD BEEN DRINKING</option>
+                                        <option value="ILLNESS/FAINTED">ILLNESS/FAINTED</option>
+                                        <option value="IMPAIRED - ALCOHOL">IMPAIRED - ALCOHOL</option>
+                                        <option value="IMPAIRED - ALCOHOL AND DRUGS">IMPAIRED - ALCOHOL AND DRUGS</option>
+                                        <option value="IMPAIRED - DRUGS">IMPAIRED - DRUGS</option>
+                                        <option value="MEDICATED">MEDICATED</option>
+                                        <option value="NORMAL">NORMAL</option>
+                                        <option value="OTHER">OTHER</option>
+                                        <option value="REMOVED BY EMS">REMOVED BY EMS</option>
+                                        <option value="UNKNOWN">UNKNOWN</option>
+                                        
+                                    </select>
+                                <span class="focus-input100"></span>
+                            </div>
+
+                            <div class="wrap-input100" style="border-bottom: 0px;" >
+                                <span class="label-input100">ROADWAY CONDITION</span>
+                                    <select class="input100"  id="ROADWAY CONDITION" name="ROADWAY CONDITION" style="padding: 10px 5px;margin-top: 15px;border: 2px solid #d9d9d9;" required>
+                                        <option value="">SELECT ROADWAY CONDITION</option>
+                                        <option value="ICE">ICE</option>
+                                        <option value="OTHER">OTHER</option>
+                                        <option value="SAND, MUD, DIRT">SAND, MUD, DIRT</option>
+                                        <option value="SNOW OR SLUSH">SNOW OR SLUSH</option>
+                                        <option value="UNKNOWN">UNKNOWN</option>
+                                        <option value="WET">WET</option>
+                                        
+                                    </select>
+                                <span class="focus-input100"></span>
+                            </div>
+                            
+                            <div class="wrap-input100" style="border-bottom: 0px;" >
+                                <span class="label-input100">DEVICE CONDITION</span>
+                                    <select class="input100"  id="DEVICE CONDITION" name="DEVICE CONDITION" style="padding: 10px 5px;margin-top: 15px;border: 2px solid #d9d9d9;" required>
+                                        <option value="">SELECT DEVICE CONDITION</option>
+                                        <option value="FUNCTIONING PROPERLY">FUNCTIONING PROPERLY</option>
+                                        <option value="MISSING">MISSING</option>
+                                        <option value="NO CONTROLS">NO CONTROLS</option>
+                                        <option value="NOT FUNCTIONING">NOT FUNCTIONING</option>
+                                        <option value="OTHER">OTHER</option>
+                                        <option value="UNKNOWN">UNKNOWN</option>
+                                        <option value="WORN REFLECTIVE MATERIAL">WORN REFLECTIVE MATERIAL</option>
+                                        
+                                    </select>
+                                <span class="focus-input100"></span>
+                            </div>
+
+                            <div class="wrap-input100" style="border-bottom: 0px;" >
+                                <span class="label-input100">FIRST CRASH TYPE</span>
+                                    <select class="input100"  id="FIRST CRASH TYPE" name="FIRST CRASH TYPE" style="padding: 10px 5px;margin-top: 15px;border: 2px solid #d9d9d9;" required>
+                                        <option value="">SELECT FIRST CRASH TYPE</option>
+                                        <option value="ANIMAL">ANIMAL</option>
+                                        <option value="FIXED OBJECT">FIXED OBJECT</option>
+                                        <option value="HEAD ON">HEAD ON</option>
+                                        <option value="OTHER NONCOLLISION">OTHER NONCOLLISION</option>
+                                        <option value="OTHER OBJECT">OTHER OBJECT</option>
+                                        <option value="OVERTURNED">OVERTURNED</option>
+                                        <option value="PARKED MOTOR VEHICLE">PARKED MOTOR VEHICLE</option>
+                                        <option value="PEDALCYCLIST">PEDALCYCLIST</option>
+                                        <option value="PEDESTRIAN">PEDESTRIAN</option>
+                                        <option value="REAR END">REAR END</option>
+                                        <option value="REAR TO FRONT">REAR TO FRONT</option>
+                                        <option value="REAR TO REAR">REAR TO REAR</option>
+                                        <option value="REAR TO SIDE">REAR TO SIDE</option>
+                                        <option value="SIDESWIPE OPPOSITE DIRECTION">SIDESWIPE OPPOSITE DIRECTION</option>
+                                        <option value="SIDESWIPE SAME DIRECTION">SIDESWIPE SAME DIRECTION</option>
+                                        <option value="TRAIN">TRAIN</option>
+                                        <option value="TURNING">TURNING</option>                            
+                                        
+                                    </select>
+                                <span class="focus-input100"></span>
+                            </div>
+                            <div class="container-contact100-form-btn">
+                                <div class="wrap-contact100-form-btn">
+                                    <div class="contact100-form-bgbtn"></div>
+                                    
+                                    <button class="contact100-form-btn" id='submit' type="submit" value="Upload" method="GET">Submit</button>
+                                    
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+   <!-- END MAIN CONTAINER -->
+
+    <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
+    <!-- {{ url_for('static', filename='assets/js/dashboard/papaparse.js') }} -->
+    <script type="text/javascript">
+        function showname() {
+            var name_1 = document.getElementById('file-upload_1');
+            document.getElementById('label_1').innerHTML = name_1.files.item(0).name;
+        };
+
+        function showname_2() {
+            var name_2 = document.getElementById('file-upload_2');
+            document.getElementById('label_2').innerHTML = name_2.files.item(0).name;
+        };
+
+        function showname_3() {
+            var name_3 = document.getElementById('file-upload_3');
+            document.getElementById('label_3').innerHTML = name_3.files.item(0).name;
+        };
+        function showname_4() {
+            var name_4 = document.getElementById('file-upload_4');
+            document.getElementById('label_4').innerHTML = name_4.files.item(0).name;
+        };
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="{{ url_for('static', filename='bootstrap/js/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/app.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            App.init();
+        });
+    </script>
+    <script src="{{ url_for('static', filename='assets/js/custom.js') }}"></script>
+    <!-- END GLOBAL MANDATORY SCRIPTS -->
+
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+    <!-- <script src="{{ url_for('static', filename='plugins/apex/apexcharts.min.js') }}"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.22.3/apexcharts.min.js"></script>
+    <script src="{{ url_for('static', filename='assets/js/dashboard/dash_1.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/dashboard/papaparse.min.js') }}"></script>
+    
+
 </body>
 </html>
-
-
 
 

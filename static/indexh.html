@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <title>iDiagnosis</title>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico"/>
+
+
+    <link href="{{ url_for('static', filename='assets/css/loader.css') }}" rel="stylesheet" type="text/css" />
+    <script src="{{ url_for('static', filename='assets/js/loader.js') }}"></script>
+
+    <script src="https://d3js.org/d3-queue.v3.min.js"></script>
+
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href="{{ url_for('static', filename='plugins/apex/apexcharts.css') }}" rel="stylesheet" type="text/css">
+    <script src="{{ url_for('static', filename='plugins/apex/apexcharts.min.js') }}"></script>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+    <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='assets/css/plugins.css') }}" rel="stylesheet" type="text/css" />
+    <!-- END GLOBAL MANDATORY STYLES -->
+
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.22.3/apexcharts.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js" type="text/javascript"></script>
+    <!-- <link href="{{ url_for('static', filename='plugins/apex/apexcharts.css') }}" rel="stylesheet" type="text/css"> -->
+
+    <link href="{{ url_for('static', filename='assets/css/dashboard/dash_1.css') }}" rel="stylesheet" type="text/css" />
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.22.3/apexcharts.css" rel="stylesheet" type="text/css" />
+
+
+    <style>
+        html {
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 500px;
+        }
+
+        .pricing-header {
+            max-width: 700px;
+        }
+
+        .card-deck .card {
+            min-width: 150px;
+        }
+
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            html {
+                font-size: 16px;
+            }
+
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+
+    <style type="text/css">
+      #pdf-viewer {
+        width: 100%;
+        height: 450px;
+        background: rgba(0, 0, 0, 0.1);
+        overflow: auto;
+      }
+
+      .pdf-page-canvas {
+        display: block;
+        margin: 5px auto;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+      }
+    </style>
+
+    <script>   
+        url = 'https://github.com/mozilla/pdf.js/blob/master/test/pdfs/tracemonkey.pdf';
+        var thePdf = null;
+        var scale = 3;
+
+        PDFJS.getDocument(url).promise.then(function(pdf) {
+            thePdf = pdf;
+            viewer = document.getElementById('pdf-viewer');
+
+            for(page = 1; page <= pdf.numPages; page++) {
+              canvas = document.createElement("canvas");    
+              canvas.className = 'pdf-page-canvas';         
+              viewer.appendChild(canvas);            
+              renderPage(page, canvas);
+            }
+        });
+
+        function renderPage(pageNumber, canvas) {
+            thePdf.getPage(pageNumber).then(function(page) {
+              viewport = page.getViewport(scale);
+              canvas.height = viewport.height;
+              canvas.width = viewport.width;          
+              page.render({canvasContext: canvas.getContext('2d'), viewport: viewport});
+        });
+        }
+    </script>
+</head>
+<body>
+      <!-- BEGIN LOADER -->
+      <div id="load_screen"> 
+        <div class="loader"> 
+          <div class="loader-content">
+              <div class="spinner-grow align-self-center"></div>
+          </div>
+        </div>
+      </div>
+          <!--  END LOADER -->
+
+    <!--  BEGIN NAVBAR  -->
+    <div class="header-container fixed-top">
+        <header class="header navbar navbar-expand-sm">
+
+            <ul class="navbar-item theme-brand flex-row  text-center">
+                <li class="nav-item theme-logo">
+                    <a>
+                        <img src="{{ url_for('static', filename='assets/img/logo.jpg') }}" class="navbar-logo" alt="logo">
+                    </a>
+
+                </li>
+                <li class="nav-item theme-text">
+                    <a class="nav-link"> iDiagnosis </a>
+                </li>
+            </ul>
+
+            <ul class="navbar-item flex-row ml-md-0 ml-auto">
+                <li class="nav-item align-self-center search-animated">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search toggle-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <form class="form-inline search-full form-inline search" role="search">
+                        <div class="search-bar">
+                            <input type="text" class="form-control search-form-control  ml-lg-auto" placeholder="Search...">
+                        </div>
+                    </form>
+                </li>
+            </ul>
+
+            <ul class="navbar-item flex-row ml-md-auto">
+
+                <li class="nav-item dropdown language-dropdown">
+                    <a href="javascript:void(0);" class="nav-link dropdown-toggle" id="language-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="{{ url_for('static', filename='assets/img/ca.png') }}" class="flag-width" alt="flag">
+                    </a>
+                    <div class="dropdown-menu position-absolute" aria-labelledby="language-dropdown">
+                        <a class="dropdown-item d-flex" href="javascript:void(0);"><img src="{{ url_for('static', filename='assets/img/de.png') }}" class="flag-width" alt="flag"> <span class="align-self-center">&nbsp;German</span></a>
+                        <a class="dropdown-item d-flex" href="javascript:void(0);"><img src="{{ url_for('static', filename='assets/img/jp.png') }}" class="flag-width" alt="flag"> <span class="align-self-center">&nbsp;Japanese</span></a>
+                        <a class="dropdown-item d-flex" href="javascript:void(0);"><img src="{{ url_for('static', filename='assets/img/fr.png') }}" class="flag-width" alt="flag"> <span class="align-self-center">&nbsp;French</span></a>
+                        <a class="dropdown-item d-flex" href="javascript:void(0);"><img src="{{ url_for('static', filename='assets/img/ca.png') }}" class="flag-width" alt="flag"> <span class="align-self-center">&nbsp;English</span></a>
+                    </div>
+                </li>
+            </ul>
+        </header>
+    </div>
+    <div class="sub-header-container">
+    <header class="header navbar navbar-expand-sm">
+        <a href="javascript:void(0);" class="sidebarCollapse" data-placement="bottom"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></a>
+        <ul class="navbar-nav flex-row">
+            <li>
+                <div class="page-header">
+                    <nav class="breadcrumb-one" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="javascript:void(0);">Dashboard</a></li>
+                            </ol>
+                        </nav>
+
+                    </div>
+                </li>
+            </ul>
+        </header>
+    </div>
+
+    <!--  BEGIN MAIN CONTAINER  -->
+    <div class="main-container" id="container">
+                <!-- <div class="overlay"></div> -->
+                <div class="search-overlay"></div>
+                <!--  BEGIN SIDEBAR  -->
+                <div class="sidebar-wrapper sidebar-theme">
+                    <nav id="sidebar">
+                        <div class="shadow-bottom"></div>
+                        <ul class="list-unstyled menu-categories" id="accordionExample">        
+                            <li class="menu">
+                                <a href="#app" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                                    <div class="">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-cpu"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+                                        <span>Apps</span>
+                                    </div>
+                                    <div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                    </div>
+                                </a>
+                                <ul class="collapse submenu list-unstyled" id="app" data-parent="#accordionExample">
+                                    <li>
+                                        <a href="apps_chat.html"> Stock Price Forcast </a>
+                                    </li>
+                                    <li>
+                                        <a href="apps_mailbox.html"> Image Classifier  </a>
+                                    </li>
+                                    <li>
+                                        <a href="apps_todoList.html"> Accident Classifier </a>
+                                    </li>                            
+                                </ul>
+                            </li>
+
+
+
+                        </ul>
+                        <!-- <div class="shadow-bottom"></div> -->
+                        
+                    </nav>
+
+                </div>
+
+                <!--  END SIDEBAR  -->
+
+          <!--  BEGIN CONTENT AREA  -->
+          
+        <div id="content" class="main-content">
+                     
+            <div class="layout-px-spacing">
+                <div>
+                <center>
+                    <object data="{{ url_for('static', filename='pdfs/web/Clinical Case of Lung Disease.pdf') }}" type="application/pdf" width="100%" height="100%" id="pdf-viewer">
+                    </object>
+                </center>
+                </div>
+                    <div>
+                        <div class="row layout-top-spacing">
+                            <div class="card mb-4 shadow-sm">
+                                <div class="card-header">
+                                    <h5 class="my-0 font-weight-normal">Diagnose Covid-19</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="text-center">
+                                        <form action="/uploadedcnd" method="POST" enctype="multipart/form-data">
+                                            <input type="file" name="file" id="file-upload_2" onchange="showname_2()" />
+                                        <input type="submit" value="Upload" class="btn btn-outline-danger">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-4 shadow-sm">
+                            <div class="card-header">
+                                <h5 class="my-0 font-weight-normal">Diagnose Pneumonia</h5>
+                                
+                            </div>
+                            <div class="card-body">
+
+                                <div class="text-center">
+                                    <form action="/uploadedpnd" method="POST" enctype="multipart/form-data">
+                                        <input type="file" name="file" id="file-upload_3" onchange="showname_3()" />
+                                        <input type="submit" value="Upload" class="btn btn-outline-danger">
+                                    </form>
+                                    
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mb-4 shadow-sm">
+                               <div class="card-header">
+                                   <h5 class="my-0 font-weight-normal">Diagnose Covid-19/Pneumonia</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="text-center">
+                                        <form action="/uploadedmulti" method="POST" enctype="multipart/form-data">
+                                            <input type="file" name="file" id="file-upload_4" onchange="showname_4()" />
+                                            <input type="submit" value="Upload" class="btn btn-outline-danger">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+          <!--  END CONTENT AREA  -->
+        </div>
+    </div>
+       
+   <!-- END MAIN CONTAINER -->
+
+    <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
+    <!-- {{ url_for('static', filename='assets/js/dashboard/papaparse.js') }} -->
+    <script type="text/javascript">
+        function showname() {
+            var name_1 = document.getElementById('file-upload_1');
+            document.getElementById('label_1').innerHTML = name_1.files.item(0).name;
+        };
+
+        function showname_2() {
+            var name_2 = document.getElementById('file-upload_2');
+            document.getElementById('label_2').innerHTML = name_2.files.item(0).name;
+        };
+
+        function showname_3() {
+            var name_3 = document.getElementById('file-upload_3');
+            document.getElementById('label_3').innerHTML = name_3.files.item(0).name;
+        };
+        function showname_4() {
+            var name_4 = document.getElementById('file-upload_4');
+            document.getElementById('label_4').innerHTML = name_4.files.item(0).name;
+        };
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="{{ url_for('static', filename='bootstrap/js/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/app.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            App.init();
+        });
+    </script>
+    <script src="{{ url_for('static', filename='assets/js/custom.js') }}"></script>
+    <!-- END GLOBAL MANDATORY SCRIPTS -->
+
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+    <!-- <script src="{{ url_for('static', filename='plugins/apex/apexcharts.min.js') }}"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.22.3/apexcharts.min.js"></script>
+    <script src="{{ url_for('static', filename='assets/js/dashboard/dash_1.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/dashboard/papaparse.min.js') }}"></script>
+    
+
+</body>
+</html>
+
+
