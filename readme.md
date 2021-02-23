@@ -8,7 +8,7 @@
    <img src='images/Input.png' width='75%'/><img src='images/Input2.png' width='75%'/>
  
    
-   Amazon EC2 Link - http://aridavinci.com:5000/indexc.html
+   Amazon EC2 Link - https://davinciai.dev/accident
 
 # Table Of Contents
 * [Setup](#setup)
