@@ -1,14 +1,9 @@
 # Investigating the Car Accidents In Chicago
 
-<a href="https://github.com/ariavathlete/chicago_primary_cause_of-caraccidents/blob/master/Analysis%20of%20Car%20Accidents%20In%20Chicago.pdf
-">PRESENTATION</a>
-<a href="https://github.com/ariavathlete/chicago_primary_cause_of-caraccidents/blob/master/Tesla_Full_Autonomy.pdf">| BLOG</a>
-
-
    <img src='images/Input.png' width='75%'/><img src='images/Input2.png' width='75%'/>
  
    
-   Amazon EC2 Link - https://davinciai.dev/accident
+   Amazon EC2 Link - https://aritheanalyst.com/carcrash
 
 # Table Of Contents
 * [Setup](#setup)
